@@ -4,10 +4,10 @@ namespace ENIX
 {
     public static class RegisterCustomSerializer
     {
-        private static Dictionary<Type, MethodInfo> s_RegisteredCustomObjectSerializer;
-        private static Dictionary<Type, MethodInfo> s_RegisteredCustomPropertySerializer;
+        private static Dictionary<Type, MethodInfo>? s_RegisteredCustomObjectSerializer;
+        private static Dictionary<Type, MethodInfo>? s_RegisteredCustomPropertySerializer;
 
-        private static Dictionary<Type, MethodInfo> s_RegisteredCustomPropertyDeserializer;
+        private static Dictionary<Type, MethodInfo>? s_RegisteredCustomPropertyDeserializer;
 
         public static void Register()
         {
@@ -26,9 +26,13 @@ namespace ENIX
 
                 foreach (MethodInfo method in methods)
                 {
-                    CustomPropertySerializerMethod propertySerializerMethod = (CustomPropertySerializerMethod)method.GetCustomAttribute(typeof(CustomPropertySerializerMethod));
-                    CustomPropertyDeserializerMethod propertyDeserializerMethod = (CustomPropertyDeserializerMethod)method.GetCustomAttribute(typeof(CustomPropertyDeserializerMethod));
-                    CustomPropertySerializerMethod objectSerializerMethod = null;
+                    CustomPropertySerializerMethod? propertySerializerMethod = (CustomPropertySerializerMethod?)method
+                        .GetCustomAttribute(typeof(CustomPropertySerializerMethod));
+
+                    CustomPropertyDeserializerMethod? propertyDeserializerMethod = (CustomPropertyDeserializerMethod?)method
+                        .GetCustomAttribute(typeof(CustomPropertyDeserializerMethod));
+
+                    CustomPropertySerializerMethod? objectSerializerMethod = null;
 
                     if (propertySerializerMethod != null
                         && objectSerializerMethod != null

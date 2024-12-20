@@ -5,15 +5,15 @@ namespace ENIX
 {
     internal struct PropertyData
     {
-        private object Owner;
+        private object? Owner;
         private object Property;
 
-        public object Key { get; private set; }
-        public object Value { get; private set; }
+        public object? Key { get; private set; }
+        public object? Value { get; private set; }
 
         public Type GetPropertyType() => Property.GetType();
 
-        public PropertyData(object owner, object property, object value, object key = null)
+        public PropertyData(object? owner, object property, object? value, object? key = null)
         {
             Owner = owner;
             Property = property;
@@ -22,7 +22,7 @@ namespace ENIX
             Value = value;
         }
 
-        public void SetValue(object value, object key = null)
+        public void SetValue(object value, object? key = null)
         {
             Type propertyType = Property.GetType();
 
@@ -76,16 +76,14 @@ namespace ENIX
                     list.Add(value);
                 }
             }
-            else if (propertyType == Type.GetType("System.Reflection.RuntimeFieldInfo"))
+            else if(propertyType == typeof(ENIXProperty))
             {
-                FieldInfo field = Property as FieldInfo;
+                ENIXProperty? property = Property as ENIXProperty;
 
-                if (field.FieldType.IsAssignableFrom(value.GetType()) == false)
-                {
+                if (property == null)
                     throw new Exception();
-                }
 
-                field.SetValue(Owner, value);
+                property.SetValue(Owner, value);
             }
         }
     }
