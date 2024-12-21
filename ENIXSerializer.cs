@@ -11,7 +11,7 @@ namespace ENIX
 
         private static uint sm_DepthSerialization;
 
-        public static string Tab => ENIXFile.GetTab(sm_DepthSerialization);
+        public static string Tab => ENIXInfo.GetTab(sm_DepthSerialization);
 
         public static void Serialize(string name, object[] objects, string path)
         {
@@ -22,7 +22,7 @@ namespace ENIX
 
             List<string> serializedObjects = Serialize(objects);
 
-            string enix = "#ENIX v0.1";
+            string enix = "#ENIX v1.0";
 
             foreach (string serializedObject in serializedObjects)
                 enix += serializedObject;

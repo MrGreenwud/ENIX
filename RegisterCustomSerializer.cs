@@ -4,14 +4,11 @@ namespace ENIX
 {
     public static class RegisterCustomSerializer
     {
-        private static Dictionary<Type, MethodInfo>? s_RegisteredCustomObjectSerializer;
         private static Dictionary<Type, MethodInfo>? s_RegisteredCustomPropertySerializer;
-
         private static Dictionary<Type, MethodInfo>? s_RegisteredCustomPropertyDeserializer;
 
         public static void Register()
         {
-            s_RegisteredCustomObjectSerializer = new Dictionary<Type, MethodInfo>();
             s_RegisteredCustomPropertySerializer = new Dictionary<Type, MethodInfo>();
             s_RegisteredCustomPropertyDeserializer = new Dictionary<Type, MethodInfo>();
 
@@ -32,17 +29,8 @@ namespace ENIX
                     CustomPropertyDeserializerMethod? propertyDeserializerMethod = (CustomPropertyDeserializerMethod?)method
                         .GetCustomAttribute(typeof(CustomPropertyDeserializerMethod));
 
-                    CustomPropertySerializerMethod? objectSerializerMethod = null;
-
                     if (propertySerializerMethod != null
-                        && objectSerializerMethod != null
                         && propertyDeserializerMethod != null)
-                    {
-                        continue;
-                    }
-                    else if (propertySerializerMethod == null
-                        && objectSerializerMethod == null
-                        && propertyDeserializerMethod == null)
                     {
                         continue;
                     }
@@ -51,11 +39,6 @@ namespace ENIX
                     {
                         Type objType = propertySerializerMethod.Type;
                         s_RegisteredCustomPropertySerializer.Add(objType, method);
-                    }
-                    else if (objectSerializerMethod != null)
-                    {
-                        Type objType = objectSerializerMethod.Type;
-                        s_RegisteredCustomObjectSerializer.Add(objType, method);
                     }
                     else if (propertyDeserializerMethod != null)
                     {

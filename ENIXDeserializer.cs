@@ -142,7 +142,7 @@ namespace ENIX
             PropertyInfo[] properties = ENIXCash.GetProperties(ObjectType, BindingFlags.Public
               | BindingFlags.NonPublic | BindingFlags.Instance);
 
-            Dictionary<string, string> serializedPropertes = GetPropertes(serializedObject);
+            Dictionary<string, string> serializedPropertes = ENIXInfo.GetPropertes(serializedObject);
 
             foreach (string propertyName in serializedPropertes.Keys)
             {
@@ -249,7 +249,7 @@ namespace ENIX
                 throw new Exception();
 #endif
 
-            Dictionary<string, string> elements = GetPropertes(serializedProperty);
+            Dictionary<string, string> elements = ENIXInfo.GetPropertes(serializedProperty);
 
             Array array = Array.CreateInstance(elementType, elements.Count);
 
@@ -283,7 +283,7 @@ namespace ENIX
                 throw new Exception();
 #endif
 
-            Dictionary<string, string> elements = GetPropertes(serializedProperty);
+            Dictionary<string, string> elements = ENIXInfo.GetPropertes(serializedProperty);
 
             Type listType = typeof(List<>).MakeGenericType(elementType);
             IList? list = (IList?)Activator.CreateInstance(listType);
@@ -317,7 +317,7 @@ namespace ENIX
             Type keyType = argsType[0];
             Type valueType = argsType[1];
 
-            Dictionary<string, string> elements = GetPropertes(serializedProperty);
+            Dictionary<string, string> elements = ENIXInfo.GetPropertes(serializedProperty);
 
             Type dictionaryType = typeof(Dictionary<,>).MakeGenericType(keyType, valueType);
             IDictionary? dictionary = (IDictionary?)Activator.CreateInstance(dictionaryType);
@@ -329,7 +329,7 @@ namespace ENIX
 
             foreach (string elementName in elements.Keys)
             {
-                Dictionary<string, string> pairs = GetPropertes(elements[elementName]);
+                Dictionary<string, string> pairs = ENIXInfo.GetPropertes(elements[elementName]);
 
                 object key = DeserializeProperty(pairs["Key"], keyType);
                 object? value = DeserializeProperty(pairs["Value"], valueType);
@@ -357,7 +357,7 @@ namespace ENIX
                 throw new Exception();
 #endif
 
-            Dictionary<string, string> childPropertes = GetPropertes(serializedProperty);
+            Dictionary<string, string> childPropertes = ENIXInfo.GetPropertes(serializedProperty);
 
             foreach (string propertyName in childPropertes.Keys)
             {
@@ -384,82 +384,6 @@ namespace ENIX
         {
             int value = int.Parse(serializedProperty.Split(":")[1].Trim());
             return Enum.ToObject(propertyType, value);
-        }
-
-        private static Dictionary<string, string> GetPropertes(string serializedElement)
-        {
-            List<string> lines = serializedElement.Split("\n").ToList();
-
-            if (lines[0] == string.Empty)
-                lines.Remove(lines[0]);
-
-            uint depthSerialization = 0;
-
-            Dictionary<string, string> serializedPropertes = new Dictionary<string, string>();
-
-            for (int i = 1; i < lines.Count; i++)
-            {
-                string fixedLine = lines[i].Trim();
-
-                if (fixedLine.Contains("Object") || fixedLine == string.Empty)
-                    continue;
-
-                if (fixedLine.Contains("{"))
-                {
-                    depthSerialization++;
-                }
-                else if (fixedLine.Contains("}"))
-                {
-                    depthSerialization--;
-                }
-                else if (fixedLine.Contains(":"))
-                {
-                    string[] parts = fixedLine.Split(":");
-                    serializedPropertes.Add(parts[0].Trim(), fixedLine);
-                }
-                else
-                {
-                    string propertyName = fixedLine;
-                    string serializedProperty = string.Empty;
-
-                    uint curentDepthSerialization = depthSerialization;
-                    uint depth;
-                    uint lineCount = 0;
-
-                    for (int j = i; j < lines.Count; j++)
-                    {
-                        if (lines[j].Contains("{"))
-                        {
-                            depth = curentDepthSerialization - depthSerialization;
-                            serializedProperty += $"{ENIXFile.GetTab(depth)}{lines[j].Trim()}";
-                            curentDepthSerialization++;
-                        }
-                        else if (lines[j].Contains("}"))
-                        {
-                            curentDepthSerialization--;
-                            depth = curentDepthSerialization - depthSerialization;
-                            serializedProperty += $"{ENIXFile.GetTab(depth)}{lines[j].Trim()}";
-                        }
-                        else
-                        {
-                            depth = curentDepthSerialization - depthSerialization;
-                            serializedProperty += $"{ENIXFile.GetTab(depth)}{lines[j].Trim()}";
-                        }
-
-                        if (curentDepthSerialization == depthSerialization
-                            && lines[j].Contains("}"))
-                        {
-                            lineCount = (uint)(j - i);
-                            i = j;
-                            break;
-                        }
-                    }
-
-                    serializedPropertes.Add(propertyName, serializedProperty);
-                }
-            }
-
-            return serializedPropertes;
         }
 
         private static FieldInfo? FindFieldByName(FieldInfo[] fields, string fieldName)
