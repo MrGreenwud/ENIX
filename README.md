@@ -78,7 +78,10 @@ object[] objects = ENIXDeserializer.Deserialize(file);
 ```
 ## Customize
 You can add your own unique way of serializing and deserializing a specific class/structure type and extend the capabilities of the serializer.
-
+To work during program initialization, run registering custom serializers/deserializers.
+```csharp
+RegisterCustomSerializer.Register();
+```
 To create your own serializer or deserializer, create a static class and mark it with the CustomSerializer attribute and create a static method. 
 
 If you want to make a serializing method, then this method must return a string (serialized data), accept arguments: object? property, string name, Type type, be marked with the CustomPropertySerializerMethod attribute with the corresponding type
