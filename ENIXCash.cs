@@ -39,7 +39,7 @@ namespace ENIX
         public static FieldInfo[] GetFields(Type type)
         {
             if (sm_FieldCash.ContainsKey(type) == false)
-                throw new Exception();
+                throw new Exception($"{type} Type fields are not cached");
 
             return sm_FieldCash[type];
         }
@@ -53,7 +53,7 @@ namespace ENIX
         public static PropertyInfo[] GetProperties(Type type)
         {
             if (sm_PropertyCash.ContainsKey(type) == false)
-                throw new Exception();
+                throw new Exception($"{type} Type Property are not cached");
 
             return sm_PropertyCash[type];
         }

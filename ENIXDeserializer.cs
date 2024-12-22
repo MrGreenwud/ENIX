@@ -122,8 +122,10 @@ namespace ENIX
             Type? ObjectType = Type.GetType(part[1].Trim());
             string guid = part[2].Trim();
 
+#if DEBUG
             if (ObjectType == null)
-                throw new Exception("");
+                throw new Exception("Failed to get object type");
+#endif
 
             object? obj = null;
 
@@ -246,7 +248,7 @@ namespace ENIX
 
 #if DEBUG
             if (elementType == null)
-                throw new Exception();
+                throw new Exception("Failed to get array element type");
 #endif
 
             Dictionary<string, string> elements = ENIXInfo.GetPropertes(serializedProperty);
@@ -280,7 +282,7 @@ namespace ENIX
 
 #if DEBUG
             if (elementType == null)
-                throw new Exception();
+                throw new Exception("Failed to get list item type");
 #endif
 
             Dictionary<string, string> elements = ENIXInfo.GetPropertes(serializedProperty);
@@ -290,7 +292,7 @@ namespace ENIX
 
 #if DEBUG
             if (list == null)
-                throw new Exception();
+                throw new Exception("Failed to create list");
 #endif
 
             foreach (string elementName in elements.Keys)
@@ -324,7 +326,7 @@ namespace ENIX
 
 #if DEBUG
             if (dictionary == null)
-                throw new Exception();
+                throw new Exception("Failed to create dictionary");
 #endif
 
             foreach (string elementName in elements.Keys)
@@ -348,14 +350,18 @@ namespace ENIX
             return dictionary;
         }
 
-        public static object DeserializeStruct(string serializedProperty, Type propertyType)
+        public static object? DeserializeStruct(string serializedProperty, Type propertyType)
         {
-            object? property = Activator.CreateInstance(propertyType);
+            object? property = null;
 
-#if DEBUG
-            if (property == null)
-                throw new Exception();
-#endif
+            try
+            {
+                property = Activator.CreateInstance(propertyType);
+            }
+            catch(Exception e)
+            {
+                throw new Exception($"{e} Struct with type {propertyType} not have void construct");
+            }
 
             Dictionary<string, string> childPropertes = ENIXInfo.GetPropertes(serializedProperty);
 
@@ -363,6 +369,9 @@ namespace ENIX
             {
                 FieldInfo? field = propertyType.GetField(propertyName,
                     BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+
+                if (field == null)
+                    continue;
 
                 object value = DeserializeProperty(childPropertes[propertyName], field.FieldType);
 
