@@ -76,3 +76,54 @@ object[] objects = ENIXDeserializer.Deserialize(serializedObjects);
 string file = File.ReadAllText(path);
 object[] objects = ENIXDeserializer.Deserialize(file);
 ```
+## Customize
+You can add your own unique way of serializing and deserializing a specific class/structure type and extend the capabilities of the serializer.
+
+To create your own serializer or deserializer, create a static class and mark it with the CustomSerializer attribute and create a static method. 
+
+If you want to make a serializing method, then this method must return a string (serialized data), accept arguments: object? property, string name, Type type, be marked with the CustomPropertySerializerMethod attribute with the corresponding type
+##### Exemple:
+```csharp
+[CustomSerializer]
+internal static class CustomSerializerExample
+{
+    [CustomPropertySerializerMethod(typeof(Player))]
+    public static string SerializeExample(object? property, string name, Type type) 
+    {
+        //Serialize
+        return serializedObject;
+    }
+}
+```
+For serialization you can use templates from the ENIXSerializer class such as:
+- SerializeArray(object? property, string name)
+- SerializeDictionary(object? property, string name, Type type)
+- SerializeList(object? property, string name, Type type)
+- SerializeEnum(object? property, string name)
+- SerializeStruct(object property, string name, FieldInfo[] fields, bool isSerializedProperty = true)
+###### isSerializedProperty is a flag that indicates whether the serializer will take into account whether fields are marked with the SerializebleProperty attribute
+
+If you want to make a deserializing method, then this method must return an object (deserialized), take an argument: string serializedObject, be marked with a CustomPropertyDeserializerMethod attribute with the appropriate type
+##### Exemple:
+```csharp
+[CustomSerializer]
+internal static class CustomDeserializerExample
+{
+    [CustomPropertyDeserializerMethod(typeof(Player))]
+    public static object DeserializExample(string serializedObject)
+    {
+        //Deserializ
+        return obj;
+    }
+}
+```
+
+For deserialization, you can use templates from the ENIXDeserializer class, such as:
+- DeserializeArray(string serializedProperty, Type propertyType)
+- DeserializeList(string serializedProperty, Type propertyType)
+- DeserializeDictionary(string serializedProperty, Type propertyType)
+- DeserializeStruct(string serializedProperty, Type propertyType)
+- DeserializeEnum(string serializedProperty, Type propertyType)
+
+### Important! 
+If you serialize an object type in a unique way, you need to create your own unique deserialization method for that type.
