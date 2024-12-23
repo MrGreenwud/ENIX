@@ -1,4 +1,9 @@
-﻿namespace ENIX
+﻿using System;
+using System.Linq;
+using System.Collections.Generic;
+using System.Reflection;
+
+namespace ENIX
 {
     public static class ENIXInfo
     {
@@ -131,6 +136,28 @@
             }
 
             return result;
+        }
+
+        public static Assembly? FindAssembliesByType(string className)
+        {
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                Type type = assembly.GetType(className);
+
+                if (type == null)
+                    continue;
+
+                return assembly;
+            }
+
+            return null;
+        }
+
+        public static Type GetType(string className)
+        {
+            Assembly? assembly = ENIXInfo.FindAssembliesByType(className);
+            Type? type = assembly.GetType(className);
+            return type;
         }
     }
 }

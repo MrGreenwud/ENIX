@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Linq;
+using System.Collections;
 using System.Reflection;
-using ENIX.Extantions;
+using System.Collections.Generic;
 
 namespace ENIX
 {
@@ -119,12 +121,13 @@ namespace ENIX
             string line = lines[1].Trim();
 
             string[] part = line.Split(":");
-            Type? ObjectType = Type.GetType(part[1].Trim());
+            string type = part[1].Trim();
+            Type? ObjectType = ENIXInfo.GetType(type);
             string guid = part[2].Trim();
 
 #if DEBUG
             if (ObjectType == null)
-                throw new Exception("Failed to get object type");
+                throw new Exception($"Failed to get object type {type}");
 #endif
 
             object? obj = null;

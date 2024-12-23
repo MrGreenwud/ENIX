@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.IO;
 using System.Reflection;
-using ENIX.Extantions;
+using System.Collections.Generic;
+using System.Collections;
 
 namespace ENIX
 {
@@ -261,7 +263,7 @@ namespace ENIX
         {
             string serializedProperty = string.Empty;
 
-            IDictionary? dictionary = (IDictionary?)property;
+            IDictionary? dictionary = property as IDictionary;
 
 #if DEBUG
             if (dictionary == null)

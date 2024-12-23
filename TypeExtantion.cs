@@ -1,6 +1,8 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
+using System.Collections.Generic;
 
-namespace ENIX.Extantions
+namespace ENIX
 {
     public static class TypeExtantion
     {
@@ -39,7 +41,7 @@ namespace ENIX.Extantions
 
             if (type.BaseType != null)
             {
-                FieldInfo[] fieldsInfo = GetAllFieldsByType(type.BaseType, flags);
+                FieldInfo[] fieldsInfo = type.BaseType.GetAllFieldsByType(flags);
 
                 foreach (FieldInfo field in fieldsInfo)
                 {
@@ -68,7 +70,7 @@ namespace ENIX.Extantions
 
             if (type.BaseType != null)
             {
-                PropertyInfo[] propertiesInfo = GetAllPropertiesByType(type.BaseType, flags);
+                PropertyInfo[] propertiesInfo = type.BaseType.GetAllPropertiesByType(flags);
 
                 foreach (PropertyInfo property in propertiesInfo)
                 {

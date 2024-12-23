@@ -1,4 +1,6 @@
-﻿namespace ENIX
+﻿using System;
+
+namespace ENIX
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct, AllowMultiple = false)]
     public sealed class SerializebleObject : Attribute { }

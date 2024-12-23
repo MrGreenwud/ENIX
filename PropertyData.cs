@@ -1,5 +1,6 @@
-﻿using System.Collections;
-using System.Reflection;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace ENIX
 {
@@ -59,7 +60,7 @@ namespace ENIX
                         throw new ArgumentNullException("You cannot set a null key in a dictionary");
 #endif
 
-                    IDictionary dictionary = (IDictionary)Property;
+                    IDictionary? dictionary = Property as IDictionary;
 
                     Type[] argsType = dictionary.GetType().GetGenericArguments();
                     Type keyType = argsType[0];
