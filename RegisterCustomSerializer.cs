@@ -1,17 +1,17 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+
+using System.Reflection;
 
 namespace ENIX
 {
     public static class RegisterCustomSerializer
     {
-        private static Dictionary<Type, MethodInfo> s_RegisteredCustomObjectSerializer;
-        private static Dictionary<Type, MethodInfo> s_RegisteredCustomPropertySerializer;
-
-        private static Dictionary<Type, MethodInfo> s_RegisteredCustomPropertyDeserializer;
+        private static Dictionary<Type, MethodInfo>? s_RegisteredCustomPropertySerializer;
+        private static Dictionary<Type, MethodInfo>? s_RegisteredCustomPropertyDeserializer;
 
         public static void Register()
         {
-            s_RegisteredCustomObjectSerializer = new Dictionary<Type, MethodInfo>();
             s_RegisteredCustomPropertySerializer = new Dictionary<Type, MethodInfo>();
             s_RegisteredCustomPropertyDeserializer = new Dictionary<Type, MethodInfo>();
 
@@ -26,19 +26,14 @@ namespace ENIX
 
                 foreach (MethodInfo method in methods)
                 {
-                    CustomPropertySerializerMethod propertySerializerMethod = (CustomPropertySerializerMethod)method.GetCustomAttribute(typeof(CustomPropertySerializerMethod));
-                    CustomPropertyDeserializerMethod propertyDeserializerMethod = (CustomPropertyDeserializerMethod)method.GetCustomAttribute(typeof(CustomPropertyDeserializerMethod));
-                    CustomPropertySerializerMethod objectSerializerMethod = null;
+                    CustomPropertySerializerMethod? propertySerializerMethod = (CustomPropertySerializerMethod?)method
+                        .GetCustomAttribute(typeof(CustomPropertySerializerMethod));
+
+                    CustomPropertyDeserializerMethod? propertyDeserializerMethod = (CustomPropertyDeserializerMethod?)method
+                        .GetCustomAttribute(typeof(CustomPropertyDeserializerMethod));
 
                     if (propertySerializerMethod != null
-                        && objectSerializerMethod != null
                         && propertyDeserializerMethod != null)
-                    {
-                        continue;
-                    }
-                    else if (propertySerializerMethod == null
-                        && objectSerializerMethod == null
-                        && propertyDeserializerMethod == null)
                     {
                         continue;
                     }
@@ -47,11 +42,6 @@ namespace ENIX
                     {
                         Type objType = propertySerializerMethod.Type;
                         s_RegisteredCustomPropertySerializer.Add(objType, method);
-                    }
-                    else if (objectSerializerMethod != null)
-                    {
-                        Type objType = objectSerializerMethod.Type;
-                        s_RegisteredCustomObjectSerializer.Add(objType, method);
                     }
                     else if (propertyDeserializerMethod != null)
                     {
