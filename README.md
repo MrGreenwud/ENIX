@@ -77,7 +77,7 @@ string file = File.ReadAllText(path);
 object[] objects = ENIXDeserializer.Deserialize(file);
 ```
 ## Customize
-You can add your own unique way of serializing and deserializing a specific class/structure type and extend the capabilities of the serializer.
+You can add your own unique way of serializing and deserializing a specific class/structure type and extend the capabilities of the serializer like [UnIX](https://github.com/MrGreenwud/UnIX) does (ENIX extensions for Unity). 
 To work during program initialization, run registering custom serializers/deserializers.
 ```csharp
 RegisterCustomSerializer.Register();
