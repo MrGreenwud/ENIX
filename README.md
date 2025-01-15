@@ -126,5 +126,5 @@ For deserialization, you can use templates from the ENIXDeserializer class, such
 - DeserializeStruct(string serializedProperty, Type propertyType)
 - DeserializeEnum(string serializedProperty, Type propertyType)
 
-### Important! 
+### Attentions!
 If you serialize an object type in a unique way, you need to create your own unique deserialization method for that type.
