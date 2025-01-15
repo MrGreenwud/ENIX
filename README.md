@@ -49,7 +49,7 @@ Character character = new Character("Bob", 100, weapon);
 
 object[] objects = { character };
 ```
-3. Serialize your objects using the ENIXSerializer class and the Serialize method.
+3. Serialize your objects using the `ENIXSerializer` class and the `Serialize` method.
 - Serialization of classes with obtaining the result as a list of string: You can serialize your classes and get the result as a list of strings.
 ##### Exemple:
 ```csharp
@@ -61,7 +61,7 @@ List<string> serializedObjects = ENIXSerializer.Serialize(objects);
 ENIXSerializer.Serialize("FileName", objects, "path");
 ```
 ## Deserialization
-1. For deserialization, use the ENIXDeserializer class and the Deserialize method. It will return an array of objects.
+1. For deserialization, use the `ENIXDeserializer` class and the `Deserialize` method. It will return an array of objects.
 ###### This can be done in several ways
 1. Deserialization of the list of serialized objects: You can pass a list of strings that are serialized objects.
 ##### Exemple:
@@ -97,12 +97,13 @@ internal static class CustomSerializerExample
 }
 ```
 For serialization you can use templates from the ENIXSerializer class such as:
-- SerializeArray(object? property, string name)
-- SerializeDictionary(object? property, string name, Type type)
-- SerializeList(object? property, string name, Type type)
-- SerializeEnum(object? property, string name)
-- SerializeStruct(object property, string name, FieldInfo[] fields, bool isSerializedProperty = true)
-###### isSerializedProperty is a flag that indicates whether the serializer will take into account whether fields are marked with the SerializebleProperty attribute
+- `SerializeArray(object? property, string name)`
+- `SerializeDictionary(object? property, string name, Type type)`
+- `SerializeList(object? property, string name, Type type)`
+- `SerializeEnum(object? property, string name)`
+- `SerializeStruct(object property, string name, FieldInfo[] fields, bool isSerializedProperty = true)`
+
+`isSerializedProperty` is a flag that indicates whether the serializer will take into account whether fields are marked with the SerializebleProperty attribute
 
 If you want to make a deserializing method, then this method must return an object (deserialized), take an argument: string serializedObject, be marked with a CustomPropertyDeserializerMethod attribute with the appropriate type
 ##### Exemple:
@@ -120,11 +121,11 @@ internal static class CustomDeserializerExample
 ```
 
 For deserialization, you can use templates from the ENIXDeserializer class, such as:
-- DeserializeArray(string serializedProperty, Type propertyType)
-- DeserializeList(string serializedProperty, Type propertyType)
-- DeserializeDictionary(string serializedProperty, Type propertyType)
-- DeserializeStruct(string serializedProperty, Type propertyType)
-- DeserializeEnum(string serializedProperty, Type propertyType)
+- `DeserializeArray(string serializedProperty, Type propertyType)`
+- `DeserializeList(string serializedProperty, Type propertyType)`
+- `DeserializeDictionary(string serializedProperty, Type propertyType)`
+- `DeserializeStruct(string serializedProperty, Type propertyType)`
+- `DeserializeEnum(string serializedProperty, Type propertyType)`
 
 ### Attentions!
 If you serialize an object type in a unique way, you need to create your own unique deserialization method for that type.
