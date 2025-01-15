@@ -1,11 +1,10 @@
 # ENIX
-ENIX is a independent object serializer designed to simplify data serialization with key features like object type retention and reference restoration. Originally developed as part of the Enigmatic for Unity, ENIX has evolved into a standalone tool.
+ENIX is an independent object serializer designed to simplify data serialization with key features like object type preservation and reference restoration. Initially developed as part of Enigmatic for Unity, ENIX has evolved into a standalone tool
 
 ### Features
 - Independent of Unity: ENIX is a general-purpose serializer and does not rely on Unity-specific types or libraries.
-- Object Type Preservation:
-- Retains object type information during serialization.
-- Reference Restoration: Rebuilds object references during deserialization.
+- Object Type Preservation: Retains object type information during serialization.
+- Reference Restoration: Restores object references during deserialization.
 - Simple Integration: Easily integrates into any C# project.
 
 ### Installation
@@ -15,7 +14,7 @@ ENIX is a independent object serializer designed to simplify data serialization 
 
 # How to use?
 ## Serialization
-1. Create your class and mark the fields and/or properties with the SerializebleProperty attribute that you want to serialize
+1. Create your class and mark the fields and/or properties with the `SerializebleProperty` attribute that you want to serialize
 ##### Exemple:
 ```csharp
 public class Character
@@ -50,14 +49,13 @@ Character character = new Character("Bob", 100, weapon);
 
 object[] objects = { character };
 ```
-3. Serialize your objects using the ENIXSerializer class and the Serialize method. 
-###### This can be done in several ways
-1. Serialization of classes with obtaining the result as a list of string: You can serialize your classes and get the result as a list of strings.
+3. Serialize your objects using the ENIXSerializer class and the Serialize method.
+- Serialization of classes with obtaining the result as a list of string: You can serialize your classes and get the result as a list of strings.
 ##### Exemple:
 ```csharp
 List<string> serializedObjects = ENIXSerializer.Serialize(objects);
 ```
-2. Serialization to file: You can specify file names, an array of objects, and a path to save the serialized data to a file with a .enix extension.
+- Serialization to file: You can specify file names, an array of objects, and a path to save the serialized data to a file with a .enix extension.
 ##### Exemple:
 ```csharp
 ENIXSerializer.Serialize("FileName", objects, "path");
